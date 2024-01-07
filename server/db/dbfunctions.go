@@ -52,9 +52,9 @@ func GetAllVehicles(sorting string) (*[]Vehicle, error) {
 	}
 	var vehicles []Vehicle
 	result := DB.Preload("Fillups", func(db *gorm.DB) *gorm.DB {
-		return db.Order("fillups.date DESC")
+		return db.Order("fillups.date DESC, fillups.odo_reading DESC")
 	}).Preload("Expenses", func(db *gorm.DB) *gorm.DB {
-		return db.Order("expenses.date DESC")
+		return db.Order("expenses.date DESC, expenses.odo_reading DESC")
 	}).Order(sorting).Find(&vehicles)
 	return &vehicles, result.Error
 }
@@ -130,9 +130,9 @@ func GetUserVehicles(id string) (*[]Vehicle, error) {
 		return nil, err
 	}
 	err = DB.Preload("Fillups", func(db *gorm.DB) *gorm.DB {
-		return db.Order("fillups.date DESC")
+		return db.Order("fillups.date DESC, fillups.odo_reading DESC")
 	}).Preload("Expenses", func(db *gorm.DB) *gorm.DB {
-		return db.Order("expenses.date DESC")
+		return db.Order("expenses.date DESC, expenses.odo_reading DESC")
 	}).Model(user).Select("vehicles.*,user_vehicles.is_owner").Association("Vehicles").Find(&toReturn)
 	if err != nil {
 		return nil, err
@@ -157,17 +157,17 @@ func GetFillupById(id string) (*Fillup, error) {
 
 func GetFillupsByVehicleId(id string) (*[]Fillup, error) {
 	var obj []Fillup
-	result := DB.Preload(clause.Associations).Order("date desc").Find(&obj, &Fillup{VehicleID: id})
+	result := DB.Preload(clause.Associations).Order("date desc, odo_reading desc").Find(&obj, &Fillup{VehicleID: id})
 	return &obj, result.Error
 }
 func GetLatestFillupsByVehicleId(id string) (*Fillup, error) {
 	var obj Fillup
-	result := DB.Preload(clause.Associations).Order("date desc").First(&obj, &Fillup{VehicleID: id})
+	result := DB.Preload(clause.Associations).Order("date desc, odo_reading desc").First(&obj, &Fillup{VehicleID: id})
 	return &obj, result.Error
 }
 func GetFillupsByVehicleIdSince(id string, since time.Time) (*[]Fillup, error) {
 	var obj []Fillup
-	result := DB.Where("date >= ? AND vehicle_id = ?", since, id).Preload(clause.Associations).Order("date desc").Find(&obj)
+	result := DB.Where("date >= ? AND vehicle_id = ?", since, id).Preload(clause.Associations).Order("date desc, odo_reading desc").Find(&obj)
 	return &obj, result.Error
 }
 func FindFillups(condition interface{}) (*[]Fillup, error) {
@@ -192,12 +192,12 @@ func FindExpensesForDateRange(vehicleIds []string, start, end time.Time) (*[]Exp
 
 func GetExpensesByVehicleId(id string) (*[]Expense, error) {
 	var obj []Expense
-	result := DB.Preload(clause.Associations).Order("date desc").Find(&obj, &Expense{VehicleID: id})
+	result := DB.Preload(clause.Associations).Order("date desc, odo_reading desc").Find(&obj, &Expense{VehicleID: id})
 	return &obj, result.Error
 }
 func GetLatestExpenseByVehicleId(id string) (*Expense, error) {
 	var obj Expense
-	result := DB.Preload(clause.Associations).Order("date desc").First(&obj, &Expense{VehicleID: id})
+	result := DB.Preload(clause.Associations).Order("date desc, odo_reading desc").First(&obj, &Expense{VehicleID: id})
 	return &obj, result.Error
 }
 func GetExpenseById(id string) (*Expense, error) {
