@@ -1,5 +1,5 @@
 {
-  "name": "hammond-vite",
+  "name": "hammond",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -32,7 +32,8 @@
     "vue-i18n-bridge": "^9.9.0",
     "vue-meta": "^2.4.0",
     "vue-router": "^3.6.5",
-    "vuex": "^3.6.2"
+    "vuex": "^3.6.2",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "sass": "^1.69.7",
