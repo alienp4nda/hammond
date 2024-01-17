@@ -3,7 +3,7 @@
 // PascalCased version of their file name.
 
 import Vue from 'vue'
-
+/*
 // https://webpack.js.org/guides/dependency-management/#require-context
 const requireComponent = require.context(
   // Look for files in the current directory
@@ -34,3 +34,13 @@ requireComponent.keys().forEach((fileName) => {
   // Globally register the component
   Vue.component(componentName, componentConfig.default || componentConfig)
 })
+*/
+
+import BaseButton from './_base-button.vue'
+Vue.component('BaseButton', BaseButton)
+import BaseIcon from './_base-icon.vue'
+Vue.component('BaseIcon',BaseIcon)
+import BaseInputText from './_base-input-text.vue'
+Vue.component('BaseInputText',BaseInputText)
+import BaseLink from './_base-link.vue'
+Vue.component('BaseLink',BaseLink)
